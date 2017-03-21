@@ -41,7 +41,7 @@ namespace Core.Tests
             {
                 cart.AddProduct(soap);
             }
-            Assert.AreEqual(quanity, cart.GetQuantity());
+            Assert.AreEqual(quanity, cart.GetQuantity(soap));
         }
 
 
@@ -69,8 +69,22 @@ namespace Core.Tests
             cart.AddProduct(deo);
             cart.AddProduct(deo);
 
-            Assert.AreEqual(5, cart.GetQuantity());
+            Assert.AreEqual(3, cart.GetQuantity(soap));
+            Assert.AreEqual(2, cart.GetQuantity(deo));
+
             Assert.AreEqual(290, cart.GetTotal());
+        }
+
+        [TestMethod]
+        public void ShouldBeAbleToCalculateDiscountedTotal() {
+            var cart = new Cart();
+            var soapWithOffer = new Product("Soap with Offer", 30, new Offer(2, 1));
+            
+            cart.AddProduct(soapWithOffer);
+            cart.AddProduct(soapWithOffer);
+            cart.AddProduct(soapWithOffer);
+
+            Assert.AreEqual(60, cart.GetTotal());
         }
 
     }

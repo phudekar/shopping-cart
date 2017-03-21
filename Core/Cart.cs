@@ -6,7 +6,7 @@ namespace Core
 {
     public class Cart
     {
-        private IList<Product> products = new List<Product>();
+        private IDictionary<Product, int> products = new Dictionary<Product, int>();
 
         public bool IsEmpty()
         {
@@ -15,20 +15,33 @@ namespace Core
 
         public void AddProduct(Product product)
         {
-            this.products.Add(product);
-        }
-
-        public int GetQuantity()
-        {
-            return this.products.Count;
-        }
-
-        public int GetTotal()
-        {
-            var total = 0;
-            foreach (var product in products)
+            if (this.products.ContainsKey(product))
             {
-                total += product.UnitPrice;
+                this.products[product] += 1;
+            }
+            else
+            {
+                this.products.Add(product, 1);
+            }
+        }
+
+        public int GetQuantity(Product product)
+        {
+            return this.products[product];
+        }
+
+        public double GetTotal()
+        {
+            var total = 0.0;
+            foreach (var product in products.Keys)
+            {
+                var quantity = products[product];
+
+                total += product.UnitPrice * quantity;
+                if (product.Offer != null)
+                {
+                    total -= Math.Round(product.UnitPrice * quantity * product.Offer.GetDiscountPercent() / 100,2);
+                }
             }
             return total;
         }
