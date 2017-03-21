@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Core;
+using FluentAssertions;
 
 namespace Core.Tests
 {
@@ -41,7 +42,7 @@ namespace Core.Tests
             {
                 cart.AddProduct(soap);
             }
-            Assert.AreEqual(quanity, cart.GetQuantity(soap));
+            quanity.Should().Be(cart.GetQuantity(soap));
         }
 
 
